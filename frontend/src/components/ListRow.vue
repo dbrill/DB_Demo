@@ -3,21 +3,33 @@
     <div class="item">
         {{ listItem.item }} ({{ listItem.quantity }})
     </div>
-    <div class="price">
-        ${{ listItem.price }}
+    <div class="priceAndRemove">
+      <div class="price">
+          ${{ listItem.price }}
+      </div>
+      <div class="remove" @click="remove">
+        X
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Vue, Options } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 import { ListItem } from '../util/listItem';
 
+@Options({
+  emits: ['remove']
+})
 export default class ListRow extends Vue {
   
   @Prop({ required: true, default: {}})
   listItem: ListItem;
+
+  protected remove() {
+    this.$emit('remove');
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -34,6 +46,24 @@ export default class ListRow extends Vue {
 
   &:hover {
     border: 2px solid #8ffae9;
+  }
+
+  .item {
+    width: 200px;
+  }
+  .priceAndRemove {
+    display: flex;
+    flex-direction: row;
+    width: 200px;
+    justify-content: space-around;
+    align-items: center;
+
+    .remove {
+      &:hover {
+        color: red;
+        cursor: pointer;
+      }
+    }
   }
 }
 </style>
